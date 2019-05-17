@@ -11,9 +11,11 @@ tags:
   - name: "Message"
     description: "Message's information"
   - name: "Twitter_account"
-    description: "Twitter acccounts linked to the User"
+    description: "Everything about the Twitter acccounts linked to the User"
   - name: "User"
     description: "Everything about the User"
+  - name: "Subscription"
+    description: "Everything about the user's Subscription"
 
 schemes:
   - "https"
@@ -145,13 +147,79 @@ paths:
         500:
           description: "internalServerError"
 
+  /subscription:
+    post:
+      tags:
+        - "Subscription"
+      summary: "Add a new subscription to the DB"
+      description: ""
+      operationId: "addSubscription"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "Subscription object that needs to be added to the DB"
+          required: true
+          schema:
+            $ref: "#/definitions/Subscription"
+      responses:
+        400:
+          description: "badRequest"
+    get:
+      tags:
+        - "Subscription"
+      summary: "Find the user's Subscription"
+      description: ""
+      operationId: "getSubscription"
+      produces:
+        - "application/json"
+      parameters:
+        - in: "header"
+          name: "token"
+          description: "Token containing user's id"
+          type: "string"
+      responses:
+        200:
+          description: "ok"
+          schema:
+            $ref: "#/definitions/Subscription"
+        404:
+          description: "notFound"
 
-
-
-
-
-
-
+    put:
+      tags:
+        - "Subscription"
+      summary: "Update the user's subscription"
+      description: ""
+      operationId: "updateSubscription"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/xml"
+      parameters:
+        - in: "header"
+          name: "token"
+          description: "Token containing user's id"
+          type: "string"
+        - name: "messageId"
+          in: "path"
+          description: "Id of the message to update"
+          required: true
+          type: "integer"
+        - in: "body"
+          name: "body"
+          description: "Subscription object that needs to be updated"
+          required: true
+          schema:
+            $ref: "#/definitions/Subscription"
+      responses:
+        400:
+          description: "badRequest"
+        404:
+          description: "notFound"
 
   /twitterAccount:
     post:
@@ -196,43 +264,11 @@ paths:
           schema:
             type: "array"
             items:
-              $ref: "#/definitions/Twitter_account"
+              $ref: "#/definitions/Auth"
         404:
           description: "notFound"
 
   /twitterAccount/{twitter_accountId}:
-    put:
-      tags:
-        - "Twitter_account"
-      summary: "Update an existing Twitter_account by id"
-      description: ""
-      operationId: "updateTwitter_account"
-      consumes:
-        - "application/json"
-      produces:
-        - "application/json"
-      parameters:
-        - in: "header"
-          name: "token"
-          description: "Token containing user's id"
-          type: "string"
-        - in: "body"
-          name: "body"
-          description: "Twitter_account object that needs to be updated"
-          required: true
-          schema:
-            $ref: "#/definitions/Twitter_account"
-        - name: "twitter_accountId"
-          in: "path"
-          description: "Id of the twitter_account to get"
-          required: true
-          type: "integer"
-      responses:
-        400:
-          description: "badRequest"
-        404:
-          description: "notFound"
-
     get:
       tags:
         - "Twitter_account"
@@ -262,7 +298,7 @@ paths:
     delete:
       tags:
         - "Twitter_account"
-      summary: "Deletes a twitter_account by id"
+      summary: "Deletes a user's twitter_account by id"
       description: ""
       operationId: "deleteTwitter_account"
       produces:
@@ -282,21 +318,6 @@ paths:
           description: "notFound"
         500:
           description: "internalServerError"
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
   /message:
     post:
@@ -483,6 +504,36 @@ definitions:
 
     xml:
       name: "Message"
+
+  Subscription:
+    type: "object"
+    properties:
+      start:
+        type: "string"
+        description: "start date of the subcription"
+      end:
+        type: "string"
+        description: "end date of the subcription"
+      auto:
+        type: "boolean"
+        description: "In the future of the application, the user will be automatically debited "
+      counter:
+        type: "integer"
+    xml:
+      name: "Subscription"
+
+  Subscription_type:
+    type: "object"
+    properties:
+      label:
+        type: "string"
+      tweet_number:
+        type: "string"
+      auto:
+        type: "string"
+    xml:
+      name: "Subscription_type"
+
   Twitter_account:
     type: "object"
     properties:
@@ -498,6 +549,19 @@ definitions:
         type: "string"
     xml:
       name: "Twitter_account"
+  Reset:
+    type: "object"
+    properties:
+      token:
+        type: "integer"
+      firstName:
+        type: "string"
+      lastName:
+        type: "string"
+      email:
+        type: "string"
+    xml:
+      name: "Reset"
   User:
     type: "object"
     properties:
