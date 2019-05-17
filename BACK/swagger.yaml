@@ -72,6 +72,8 @@ paths:
               Auth:
                 $ref: "#/definitions/Auth"
       responses:
+        200:
+          description: "ok"
         400:
           description: "badRequest"
 
@@ -99,6 +101,8 @@ paths:
           schema:
             $ref: "#/definitions/User"
       responses:
+        200:
+          description: "ok"
         400:
           description: "badRequest"
         404:
@@ -140,6 +144,8 @@ paths:
           description: "Token containing user's id"
           type: "string"
       responses:
+        200:
+          description: "ok"
         404:
           description: "notFound"
         500:
@@ -165,6 +171,8 @@ paths:
           schema:
             $ref: "#/definitions/Subscription"
       responses:
+        200:
+          description: "ok"
         400:
           description: "badRequest"
     get:
@@ -221,6 +229,8 @@ paths:
                 $ref: "#/definitions/Stripe"
 
       responses:
+        200:
+          description: "ok"
         400:
           description: "badRequest"
         404:
@@ -248,6 +258,8 @@ paths:
               Twitter_account:
                 $ref: "#/definitions/Twitter_account"
       responses:
+        200:
+          description: "ok"
         400:
           description: "badRequest"
     get:
@@ -343,6 +355,8 @@ paths:
           schema:
             $ref: "#/definitions/Message"
       responses:
+        200:
+          description: "ok"
         400:
           description: "badRequest"
   /message/{offset}/{limit}:
@@ -407,6 +421,8 @@ paths:
           schema:
             $ref: "#/definitions/Message"
       responses:
+        200:
+          description: "ok"
         400:
           description: "badRequest"
         404:
@@ -457,6 +473,8 @@ paths:
           required: true
           type: "integer"
       responses:
+        200:
+          description: "ok"
         404:
           description: "notFound"
         500:
