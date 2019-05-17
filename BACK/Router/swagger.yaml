@@ -10,7 +10,7 @@ tags:
     description: "Log the user"
   - name: "Message"
     description: "Message's information"
-  - name: "Twitter_acccount"
+  - name: "Twitter_account"
     description: "Twitter acccounts linked to the User"
   - name: "User"
     description: "Everything about the User"
@@ -145,12 +145,165 @@ paths:
         500:
           description: "internalServerError"
 
+
+
+
+
+
+
+
+
+  /twitterAccount:
+    post:
+      tags:
+        - "Twitter_account"
+      summary: "Add a new twitter_account to the DB"
+      description: "Connect and add twitter account's data to the DB"
+      operationId: "addTwitter_account"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "Twitter account object that needs to be added to the DB"
+          required: true
+          schema:
+            type: "object"
+            properties:
+              Twitter_account:
+                $ref: "#/definitions/Twitter_account"
+      responses:
+        400:
+          description: "badRequest"
+    get:
+      tags:
+        - "Twitter_account"
+      summary: "Find all user's Twitter_account"
+      description: ""
+      operationId: "getAllTwitter_account"
+      produces:
+        - "application/json"
+      parameters:
+        - in: "header"
+          name: "token"
+          description: "Token containing user's id"
+          type: "string"
+      responses:
+        200:
+          description: "ok"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Twitter_account"
+        404:
+          description: "notFound"
+
+  /twitterAccount/{twitter_accountId}:
+    put:
+      tags:
+        - "Twitter_account"
+      summary: "Update an existing Twitter_account by id"
+      description: ""
+      operationId: "updateTwitter_account"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - in: "header"
+          name: "token"
+          description: "Token containing user's id"
+          type: "string"
+        - in: "body"
+          name: "body"
+          description: "Twitter_account object that needs to be updated"
+          required: true
+          schema:
+            $ref: "#/definitions/Twitter_account"
+        - name: "twitter_accountId"
+          in: "path"
+          description: "Id of the twitter_account to get"
+          required: true
+          type: "integer"
+      responses:
+        400:
+          description: "badRequest"
+        404:
+          description: "notFound"
+
+    get:
+      tags:
+        - "Twitter_account"
+      summary: "Find user's Twitter_account by Id"
+      description: ""
+      operationId: "getTwitter_account"
+      produces:
+        - "application/json"
+      parameters:
+        - in: "header"
+          name: "token"
+          description: "Token containing user's id"
+          type: "string"
+        - name: "twitter_accountId"
+          in: "path"
+          description: "Id of the twitter_account to get"
+          required: true
+          type: "integer"
+      responses:
+        200:
+          description: "ok"
+          schema:
+            $ref: "#/definitions/Twitter_account"
+        404:
+          description: "notFound"
+
+    delete:
+      tags:
+        - "Twitter_account"
+      summary: "Deletes a twitter_account by id"
+      description: ""
+      operationId: "deleteTwitter_account"
+      produces:
+        - "application/json"
+      parameters:
+        - in: "header"
+          name: "token"
+          description: "Token containing user's id"
+          type: "string"
+        - name: "twitter_accountId"
+          in: "path"
+          description: "Id of the twitter_account to get"
+          required: true
+          type: "integer"
+      responses:
+        404:
+          description: "notFound"
+        500:
+          description: "internalServerError"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   /message:
     post:
       tags:
         - "Message"
       summary: "Add a new message to the DB"
-      description: "Add a new message to the DB linked to the user and twitter_account"
+      description: "Add a new message to the DB linked to the user and twitter account"
       operationId: "addMessage"
       consumes:
         - "application/json"
@@ -166,6 +319,39 @@ paths:
       responses:
         400:
           description: "badRequest"
+  /message/{offset}/{limit}:
+    get:
+      tags:
+        - "Message"
+      summary: "Find all user's message"
+      description: "return all user's message from offset and limit value"
+      operationId: "getMessage"
+      produces:
+        - "application/json"
+      parameters:
+        - in: "header"
+          name: "token"
+          description: "Token containing user's id"
+          type: "string"
+        - name: "offset"
+          in: "path"
+          description: "Offset used for the sql request"
+          required: true
+          type: "integer"
+        - name: "limit"
+          in: "path"
+          description: "Limit used for the sql request"
+          required: true
+          type: "integer"
+      responses:
+        200:
+          description: "ok"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Message"
+        404:
+          description: "notFound"
 
   /message/{messageId}:
     put:
@@ -202,9 +388,9 @@ paths:
     get:
       tags:
         - "Message"
-      summary: "Finds message by Id"
+      summary: "Find users's message by Id"
       description: "return message's data"
-      operationId: "getMessage"
+      operationId: "getAllMessage"
       produces:
         - "application/json"
       parameters:
@@ -219,7 +405,7 @@ paths:
           type: "integer"
       responses:
         200:
-          description: "successful operation"
+          description: "ok"
           schema:
             type: "array"
             items:
@@ -263,6 +449,8 @@ definitions:
   Message:
     type: "object"
     properties:
+      id:
+        type: "integer"
       text:
         type: "string"
         description: "message's text"
@@ -286,12 +474,20 @@ definitions:
         type: "array"
         description: "array of image in base64 string format "
         items:
-          type: "string"
+          type: "object"
+          properties:
+            id:
+              type: "integer"
+            base64:
+              type: "string"
+
     xml:
       name: "Message"
   Twitter_account:
     type: "object"
     properties:
+      id:
+        type: "integer"
       api_id:
         type: "string"
       api_secret:
@@ -305,6 +501,8 @@ definitions:
   User:
     type: "object"
     properties:
+      id:
+        type: "integer"
       firstName:
         type: "string"
       lastName:
