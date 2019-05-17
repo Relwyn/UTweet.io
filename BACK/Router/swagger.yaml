@@ -120,11 +120,9 @@ paths:
           type: "string"
       responses:
         200:
-          description: "successful operation"
+          description: "ok"
           schema:
-            type: "array"
-            items:
-              $ref: "#/definitions/User"
+            $ref: "#/definitions/User"
         404:
           description: "notFound"
 
@@ -152,7 +150,7 @@ paths:
       tags:
         - "Message"
       summary: "Add a new message to the DB"
-      description: "Add a new message to the DB linked to the user and twitter_account(s)"
+      description: "Add a new message to the DB linked to the user and twitter_account"
       operationId: "addMessage"
       consumes:
         - "application/json"
@@ -173,23 +171,26 @@ paths:
     put:
       tags:
         - "Message"
-      summary: "Update an existing message"
-      description: ""
-      operationId: "updateMessage"
+      summary: "Update a user's message"
+      description: "Check if the user is the owner, find and update the message"
+      operationId: "updateMesssage"
       consumes:
         - "application/json"
-        - "application/xml"
       produces:
         - "application/xml"
-        - "application/json"
       parameters:
         - in: "header"
           name: "token"
           description: "Token containing user's id"
           type: "string"
+        - name: "messageId"
+          in: "path"
+          description: ""
+          required: true
+          type: "integer"
         - in: "body"
           name: "body"
-          description: "Message object that needs to be updated"
+          description: "User object that needs to be updated"
           required: true
           schema:
             $ref: "#/definitions/Message"
@@ -198,13 +199,11 @@ paths:
           description: "badRequest"
         404:
           description: "notFound"
-
-
     get:
       tags:
         - "Message"
-      summary: "Finds Message by Id or "
-      description: "return message's data "
+      summary: "Finds User by Id"
+      description: "return user's data"
       operationId: "getMessage"
       produces:
         - "application/json"
@@ -213,16 +212,20 @@ paths:
           name: "token"
           description: "Token containing user's id"
           type: "string"
+        - name: "messageId"
+          in: "path"
+          description: ""
+          required: true
+          type: "integer"
       responses:
         200:
           description: "successful operation"
           schema:
             type: "array"
             items:
-              $ref: "#/definitions/User"
+              $ref: "#/definitions/Message"
         404:
           description: "notFound"
-
     delete:
       tags:
         - "Message"
@@ -236,6 +239,11 @@ paths:
           name: "token"
           description: "Token containing user's id"
           type: "string"
+        - name: "messageId"
+          in: "path"
+          description: ""
+          required: true
+          type: "integer"
       responses:
         404:
           description: "notFound"
@@ -252,6 +260,48 @@ definitions:
         type: "string"
     xml:
       name: "Auth"
+  Message:
+    type: "object"
+    properties:
+      text:
+        type: "string"
+        description: "message's text"
+      date:
+        type: "string"
+        description: "next sending date"
+      countdown:
+        type: "string"
+        description: "number of Message to send"
+      timer:
+        type: "string"
+        description: "time between each message"
+      user_id:
+        type: "integer"
+        description: "user's id"
+      twitter_account:
+        type: "array"
+        items:
+          type: "integer"
+      images:
+        type: "array"
+        description: "array of image in base64 string format "
+        items:
+          type: "string"
+    xml:
+      name: "Message"
+  Twitter_account:
+    type: "object"
+    properties:
+      api_id:
+        type: "string"
+      api_secret:
+        type: "string"
+      email:
+        type: "string"
+      name:
+        type: "string"
+    xml:
+      name: "Twitter_account"
   User:
     type: "object"
     properties:
