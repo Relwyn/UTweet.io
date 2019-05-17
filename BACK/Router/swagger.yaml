@@ -18,7 +18,7 @@ tags:
 schemes:
   - "https"
 paths:
-  /auth:
+  /login:
     post:
       tags:
         - "Authenticate"
@@ -185,12 +185,12 @@ paths:
           type: "string"
         - name: "messageId"
           in: "path"
-          description: ""
+          description: "Id of the message to update"
           required: true
           type: "integer"
         - in: "body"
           name: "body"
-          description: "User object that needs to be updated"
+          description: "Message object that needs to be updated"
           required: true
           schema:
             $ref: "#/definitions/Message"
@@ -202,8 +202,8 @@ paths:
     get:
       tags:
         - "Message"
-      summary: "Finds User by Id"
-      description: "return user's data"
+      summary: "Finds message by Id"
+      description: "return message's data"
       operationId: "getMessage"
       produces:
         - "application/json"
@@ -214,7 +214,7 @@ paths:
           type: "string"
         - name: "messageId"
           in: "path"
-          description: ""
+          description: "id of the message to get"
           required: true
           type: "integer"
       responses:
@@ -229,8 +229,8 @@ paths:
     delete:
       tags:
         - "Message"
-      summary: "Deletes a user"
-      description: ""
+      summary: "Deletes a message"
+      description: "delete a message by id"
       operationId: "deleteMessage"
       produces:
         - "application/json"
@@ -241,7 +241,7 @@ paths:
           type: "string"
         - name: "messageId"
           in: "path"
-          description: ""
+          description: "Id of the message to delete"
           required: true
           type: "integer"
       responses:
