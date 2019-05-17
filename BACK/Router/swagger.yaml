@@ -10,12 +10,12 @@ tags:
     description: "Log the user"
   - name: "Message"
     description: "Message's information"
+  - name: "Subscription"
+    description: "Everything about the user's Subscription"
   - name: "Twitter_account"
     description: "Everything about the Twitter acccounts linked to the User"
   - name: "User"
     description: "Everything about the User"
-  - name: "Subscription"
-    description: "Everything about the user's Subscription"
 
 schemes:
   - "https"
@@ -42,9 +42,7 @@ paths:
         200:
           description: "ok"
           schema:
-            type: "array"
-            items:
-              $ref: "#/definitions/User"
+            $ref: "#/definitions/User"
         400:
           description: "badRequest"
         401:
@@ -147,11 +145,12 @@ paths:
         500:
           description: "internalServerError"
 
+
   /subscription:
     post:
       tags:
         - "Subscription"
-      summary: "Add a new subscription to the DB"
+      summary: "Add a new subscription to the new user "
       description: ""
       operationId: "addSubscription"
       consumes:
@@ -214,7 +213,13 @@ paths:
           description: "Subscription object that needs to be updated"
           required: true
           schema:
-            $ref: "#/definitions/Subscription"
+            type: "object"
+            properties:
+              subsciption:
+                $ref: "#/definitions/Subscription"
+              stripe:
+                $ref: "#/definitions/Stripe"
+
       responses:
         400:
           description: "badRequest"
@@ -522,17 +527,14 @@ definitions:
     xml:
       name: "Subscription"
 
-  Subscription_type:
+  Stripe:
     type: "object"
     properties:
-      label:
+      data:
         type: "string"
-      tweet_number:
-        type: "string"
-      auto:
-        type: "string"
+        description: "stripe payement data that will be verified by the api"
     xml:
-      name: "Subscription_type"
+      name: "Stripe"
 
   Twitter_account:
     type: "object"
@@ -549,19 +551,6 @@ definitions:
         type: "string"
     xml:
       name: "Twitter_account"
-  Reset:
-    type: "object"
-    properties:
-      token:
-        type: "integer"
-      firstName:
-        type: "string"
-      lastName:
-        type: "string"
-      email:
-        type: "string"
-    xml:
-      name: "Reset"
   User:
     type: "object"
     properties:
